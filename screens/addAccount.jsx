@@ -12,23 +12,20 @@ function AddAccount({navigation}){
     const [showPassword, setShowPassword] = useState(false)
 
     function pressHandler(values, url){
-        console.log(values)
         fetch(url, {
-            method:'POST',
+            method:"POST",
             headers:{
                 "Accept": "application/json",
                 "Content-Type":"application/json"
             },
             body: JSON.stringify(values)
         })
-        .then((resJ) => {
+        .then((res) => res.json())
+        .then((res) => {
             Alert.alert("Data inserted")
-            console.log(values)
-            console.log(resJ)
             navigation.navigate("SignUp")
         })
         .catch((err) => {
-            console.log(err)
             Alert.alert(err)
         })
     }
@@ -53,8 +50,7 @@ function AddAccount({navigation}){
                         initialValues={{ fname:'', lname:'', contact:'', email:'', password:'', confirm:'' }}
                         onSubmit={(values, actions) => {
                             actions.resetForm()
-                            pressHandler(values, 'http://192.168.0.144/account.php')
-                            
+                            pressHandler(values, 'http://192.168.0.144/insert.php')
                         }}
                     >
                 {
