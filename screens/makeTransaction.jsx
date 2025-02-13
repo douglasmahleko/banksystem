@@ -4,8 +4,11 @@ import { theme } from "../assets/contents/themes"
 import { ScrollView } from "react-native"
 import { sizes } from "../assets/contents/sizes"
 import { Formik } from "formik"
+import { useRoute } from '@react-navigation/native';
 
 function MakeTransaction({navigation}){
+    const route = useRoute();
+    const user1 = route.params
     function renderHeader(){
         return(
             <View style={{
@@ -15,15 +18,13 @@ function MakeTransaction({navigation}){
                 paddingHorizontal:sizes.padding*2
             }} >
                 <Text style={{color:theme.white, fontWeight:"bold", fontSize:20, marginLeft:sizes.padding*1.5}} > 
-                Make Transaction</Text>
+                Make Transaction </Text>
             </View>
         )
     }
     function pressHandler(values, url){
-        console.log(values)
-        console.log(url)
         fetch(url, {
-            method:'POST',
+            method:"POST",
             headers:{
                 "Accept": "application/json",
                 "Content-Type":"application/json"
@@ -31,33 +32,30 @@ function MakeTransaction({navigation}){
             body: JSON.stringify(values)
         })
         .then((res) => res.json())
-        .then((resJ) => {
-            Alert.alert(resJ)
-            console.log(resJ)
-            navigation.navigate("ViewTransaction")
+        .then((res) => {
+            Alert.alert("Data inserted")
+            navigation.navigate("SignUp")
         })
         .catch((err) => {
             Alert.alert(err)
-            console.log(err)
         })
     }
     function renderForm(){
         return(
             <ScrollView style={{marginTop:sizes.padding*3, marginHorizontal:sizes.padding*3}}>
                 <Formik
-                        initialValues={{sender:"", receiver:'', purpose:'', amount:"", transactionTime: new Date()}}
+                        initialValues={{sender:'', receiver:'', purpose:'', amount:"", transactionTime: new Date()}}
                         onSubmit={(values, actions) => {
                             actions.resetForm()
-                            pressHandler(values, 'http://192.168.0.144/transact.php')
-                            console.log(values)
+                            pressHandler(values, 'http://192.168.0.144/insertTransaction.php')
                         }}
                     >
                 {
                     (props) => (
-                        <View>
-                            <View style={{marginTop:sizes.padding*3}}>
+            <View>
+                <View style={{marginTop:sizes.padding*3}}>
                     <Text style={{fontSize:16,
-                            fontWeight:"bold", color:theme.lightGreen}}>My Account</Text>
+                            fontWeight:"bold", color:theme.lightGreen}}>Sender Account</Text>
                     <TextInput placeholder="Email..."
                         selectionColor={theme.white}
                         placeholderTextColor={theme.white}
